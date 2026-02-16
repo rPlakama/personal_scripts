@@ -1,10 +1,10 @@
 #!/run/current-system/sw/bin/bash
 
-SOURCE_ROOT="/mnt/@media/music/library/"
-DEST_ROOT="/media/library/music/opus"
-BITRATE="196k"
+SOURCE_ROOT="/mnt/@media/music/library"
+DEST_ROOT="/mnt/@media/music/opus"
+BITRATE="192k"
 
-LOG="/config/logs/flac2opus_mirror.log"
+LOG="/tmp/flac2opus_mirror.log"
 TRACKS="$lidarr_addedtrackpaths"
 [ -z "$TRACKS" ] && TRACKS="$lidarr_trackfile_path"
 
@@ -26,7 +26,6 @@ echo "$TRACKS" | tr '|' '\n' | while read -r FLAC_PATH; do
     if [ -f "$FLAC_PATH" ]; then
 
         OPUS_PATH="${FLAC_PATH/$SOURCE_ROOT/$DEST_ROOT}"
-
         OPUS_PATH="${OPUS_PATH%.*}.opus"
 
         OPUS_DIR=$(dirname "$OPUS_PATH")
