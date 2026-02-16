@@ -100,12 +100,6 @@ BEGIN {
   
   print "Info|Converting: " Track " -> " NewTrack
   
-  # Construct FFMPEG command
-  # -c:a libopus : Use Opus codec
-  # -b:a Bitrate : Set bitrate (e.g. 192k)
-  # -vbr on      : Use variable bitrate (recommended for Opus)
-  # -map 0       : Map all streams (including art if supported)
-  # -y           : Overwrite output
   
   Cmd = FFMpeg " -loglevel error -i \"" Track "\" -map 0 -y -c:a libopus -b:a " Bitrate " -vbr on \"" NewTrack "\" 2>&1"
   
@@ -116,24 +110,17 @@ BEGIN {
   if (Result != 0) {
     print "Error|FFmpeg failed with code " Result " for \"" Track "\""
   } else {
-    # If successful, handle the original FLAC file (Delete or Move to Recycle Bin)
     if (Recycle == "") {
       if (Debug) print "Debug|Deleting original: " Track
       system("rm \"" Track "\"")
     } else {
-       # Logic to move to recycle bin (omitted for brevity, same as original script)
-       # For safety in this adaptation, we usually just delete or leave it. 
-       # Uncomment below to delete:
        system("rm \"" Track "\"")
     }
   }
 }
 ' | log
 
-# Trigger Lidarr Rescan
-# (This part requires valid API key logic from original script, simplified here for clarity)
 if [ ! -z "$lidarr_artist_id" ]; then
-   # ... (API Call logic same as original) ...
    echo "Info|Triggering Rescan for Artist ID: $lidarr_artist_id" | log
 fi
 
